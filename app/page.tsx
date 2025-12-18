@@ -1,5 +1,3 @@
-import React from "react";
-
 const Page = () => {
   return <div className="underline">This is home page</div>;
 };

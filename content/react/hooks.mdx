@@ -1,0 +1,37 @@
+---
+title: "Mastering React Hooks"
+description: "A deep dive into the power and flexibility of React Hooks."
+date: "2024-10-26"
+---
+
+# Understanding React Hooks
+
+React Hooks are functions that let you “hook into” React state and lifecycle features from function components. Hooks don’t work inside classes — they let you use React without classes.
+
+## The `useState` Hook
+
+The most common hook is `useState`. It lets you add React state to function components.
+
+```jsx
+import React, { useState } from 'react';
+
+function Example() {
+  // Declare a new state variable, which we'll call "count"
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+## The `useEffect` Hook
+
+The `useEffect` Hook lets you perform side effects in function components. Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
+
+This is a simple starting point for your content.
