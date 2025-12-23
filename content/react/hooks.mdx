@@ -13,7 +13,7 @@ React Hooks are functions that let you “hook into” React state and lifecycle
 The most common hook is `useState`. It lets you add React state to function components.
 
 ```jsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 function Example() {
   // Declare a new state variable, which we'll call "count"
@@ -22,9 +22,7 @@ function Example() {
   return (
     <div>
       <p>You clicked {count} times</p>
-      <button onClick={() => setCount(count + 1)}>
-        Click me
-      </button>
+      <button onClick={() => setCount(count + 1)}>Click me</button>
     </div>
   );
 }
@@ -35,3 +33,36 @@ function Example() {
 The `useEffect` Hook lets you perform side effects in function components. Data fetching, setting up a subscription, and manually changing the DOM in React components are all examples of side effects.
 
 This is a simple starting point for your content.
+
+## The `useEffect` Hook
+
+The `useEffect` Hook lets you perform side effects in function components.
+
+```tsx
+import { useState, useEffect } from "react";
+
+function Timer() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((prev) => prev + 1);
+    }, 1000);
+
+    // Cleanup function
+    return () => clearInterval(timer);
+  }, []);
+
+  return <h1>Count: {count}</h1>;
+}
+```
+
+## Advanced: `useMemo`
+
+`useMemo` is a React Hook that lets you cache the result of a calculation between re-renders.
+
+```typescript
+const expensiveValue = useMemo(() => {
+  return computeExpensiveValue(a, b);
+}, [a, b]);
+```

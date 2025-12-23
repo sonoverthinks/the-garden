@@ -1,0 +1,41 @@
+---
+title: "Understanding Props"
+description: "How to pass data between components in React."
+date: "2024-11-05"
+---
+
+# Props in React
+
+React components use *props* to communicate with each other. Every parent component can pass some information to its child components by giving them props.
+
+## Passing Props
+
+Props are like HTML attributes. For example, passing a `src` and `alt` to an `<img>` tag.
+
+```tsx
+<Avatar
+  person={{ name: 'Lin Lanying', imageId: '1bX5QH6' }}
+  size={100}
+/>
+```
+
+## Reading Props
+
+You can read these props inside the child component function:
+
+```tsx
+function Avatar({ person, size }) {
+  // person and size are available here
+  return (
+    <img
+      className="avatar"
+      src={getImageUrl(person)}
+      alt={person.name}
+      width={size}
+      height={size}
+    />
+  );
+}
+```
+
+Props are read-only. A component must never modify its own props.

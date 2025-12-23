@@ -1,0 +1,31 @@
+---
+title: "Advanced React Patterns"
+description: "Techniques for scalable React architecture."
+date: "2024-12-01"
+---
+
+# Advanced Patterns
+
+As your application grows, you might need more robust patterns.
+
+## Compound Components
+
+Compound components allow you to create flexible APIs for your components.
+
+```jsx
+<Toggle>
+  <Toggle.On>The button is on</Toggle.On>
+  <Toggle.Off>The button is off</Toggle.Off>
+  <Toggle.Button />
+</Toggle>
+```
+
+## Render Props
+
+A technique for sharing code between React components using a prop whose value is a function.
+
+```jsx
+<DataProvider render={data => (
+  <h1>Hello {data.target}</h1>
+)}/>
+```

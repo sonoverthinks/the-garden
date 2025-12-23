@@ -1,0 +1,33 @@
+---
+title: "React Components 101"
+description: "The building blocks of any React application."
+date: "2024-11-01"
+---
+
+# React Components
+
+Components are independent and reusable bits of code. They serve the same purpose as JavaScript functions, but work in isolation and return HTML.
+
+## Function Components
+
+The simplest way to define a component is to write a JavaScript function:
+
+```tsx
+function Welcome(props) {
+  return <h1>Hello, {props.name}</h1>;
+}
+```
+
+## Class Components
+
+You can also use an ES6 class to define a component:
+
+```tsx
+class Welcome extends React.Component {
+  render() {
+    return <h1>Hello, {this.props.name}</h1>;
+  }
+}
+```
+
+Components make your code modular and easier to maintain.

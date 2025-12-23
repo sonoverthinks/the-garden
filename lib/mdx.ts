@@ -46,3 +46,69 @@ export async function getPostBySlug(slugArray: string[]) {
 
   return { meta: data, content, slug };
 }
+
+/**
+ * Retrieves all posts with their metadata.
+ * @returns {Promise<object[]>} An array of post objects sorted by date (newest first).
+ */
+export async function getAllPosts() {
+  const slugs = getGardenFiles();
+  const posts = await Promise.all(
+    slugs.map(async (slugStr) => {
+      const slug = slugStr.split("/");
+      const post = await getPostBySlug(slug);
+      if (post) {
+          // Normalize slug for the link
+          return { ...post, slug: slugStr };
+      }
+      return null;
+    })
+  );
+
+  // Filter out any nulls and sort by date
+  return posts
+    .filter((post): post is NonNullable<typeof post> => post !== null)
+    .sort((a, b) => {
+       const dateA = new Date(a.meta.date || 0).getTime();
+       const dateB = new Date(b.meta.date || 0).getTime();
+       return dateB - dateA;
+    });
+}
+
+export type TreeNode = {
+  name: string;
+  slug?: string;
+  children?: TreeNode[];
+};
+
+export function getGardenTree(): TreeNode[] {
+  const files = getGardenFiles();
+  const tree: TreeNode[] = [];
+
+  for (const file of files) {
+    const parts = file.split("/");
+    let currentLevel = tree;
+
+    for (let i = 0; i < parts.length; i++) {
+      const part = parts[i];
+      const isFile = i === parts.length - 1;
+
+      let existingNode = currentLevel.find((node) => node.name === part);
+
+      if (!existingNode) {
+        existingNode = {
+          name: part,
+          slug: isFile ? file : undefined,
+          children: isFile ? undefined : [],
+        };
+        currentLevel.push(existingNode);
+      }
+
+      if (!isFile && existingNode.children) {
+        currentLevel = existingNode.children;
+      }
+    }
+  }
+
+  return tree;
+}

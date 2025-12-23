@@ -2,20 +2,33 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug } from "@/lib/mdx";
 import rehypeSlug from "rehype-slug";
+import rehypePrettyCode from "rehype-pretty-code";
 
 // Helper to extract headings for TOC using Regex
 function getHeadings(source: string) {
   const headingLines = source
     .split("\n")
     .filter((line) => line.match(/^#{1,3}\s/));
+
+  const seenIds: Record<string, number> = {};
+
   return headingLines.map((raw) => {
     const text = raw.replace(/^#{1,3}\s/, "");
     const level = raw.match(/^#{1,3}/)?.[0].length;
     // Create a slug for the ID (must match what rehype-slug does)
-    const id = text
+    let id = text
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
+
+    if (seenIds[id]) {
+      const count = seenIds[id];
+      seenIds[id] = count + 1;
+      id = `${id}-${count}`;
+    } else {
+      seenIds[id] = 1;
+    }
+
     return { text, level, id };
   });
 }
@@ -40,7 +53,17 @@ export default async function GardenPost({
         <MDXRemote
           source={post.content}
           options={{
-            mdxOptions: { rehypePlugins: [rehypeSlug] },
+            mdxOptions: {
+              rehypePlugins: [
+                rehypeSlug,
+                [
+                  rehypePrettyCode,
+                  {
+                    theme: "github-dark",
+                  },
+                ],
+              ],
+            },
           }}
         />
       </main>
