@@ -1,0 +1,102 @@
+# Probability Models and Axioms
+
+A **probabilistic model** is a quantitative description of a situation, phenomenon, or experiment where the outcome is uncertain.
+
+---
+
+## 1. The Two-Step Modeling Process
+
+To construct a valid model, you must follow two distinct steps:
+
+1. **Describe the possible outcomes:** Define the Sample Space ($\Omega$).
+2. **Specify a probability law:** Assign probabilities to outcomes or sets of outcomes (events) based on beliefs or physical properties.
+
+---
+
+## 2. The Sample Space ($\Omega$)
+
+The sample space is the set of all possible outcomes. For a set to be a valid sample space, it must satisfy three criteria:
+
+- **Mutually Exclusive:** Only one outcome can occur at a time.
+- **Collectively Exhaustive:** The set must cover every possible outcome of the experiment.
+- **Right Granularity:** The level of detail must be relevant to the question being asked (avoiding unnecessary complexity while retaining essential data).
+
+## Examples
+
+- **Discrete (Finite):** Rolling two tetrahedral (4-sided) dice. The sample space consists of 16 discrete pairs: $(1,1), (1,2), \dots, (4,4)$.
+- **Continuous:** Throwing a dart at a square target. The sample space is the set of coordinates $\{(x, y) \mid 0 \le x, y \le 1\}$.
+
+---
+
+## 3. The Probability Axioms
+
+For a probability law to be mathematically "meaningful," it must satisfy three fundamental axioms:
+
+1. **Non-negativity:** For any event $A$, $P(A) \ge 0$.
+
+2. **Normalization:** The probability of the entire sample space is 1, $P(\Omega) = 1$.
+
+3. **Additivity:** If $A$ and $B$ are disjoint events ($A \cap B = \emptyset$), then:
+
+   $$P(A \cup B) = P(A) + P(B)$$
+
+> **Note:** For continuous distributions, the probability of any _individual_ single point outcome (e.g., hitting a specific coordinate $(0.5, 0.3)$ with a dart) is $0$. Probability is instead assigned to **events** (subsets of the sample space).
+
+---
+
+## 4. Simple Consequences of Axioms
+
+From the three axioms, we can derive several useful properties:
+
+- **Upper Bound:** $P(A) \le 1$
+- **Impossible Event:** $P(\emptyset) = 0$
+- **Complementary Probability:** $P(A) + P(A^c) = 1$
+- **General Additivity:** For $k$ disjoint events, $P(A_1 \cup \dots \cup A_k) = \sum_{i=1}^k P(A_i)$
+- **Monotonicity:** If $A \subset B$, then $P(A) \le P(B)$
+
+---
+
+## 5. Calculation Methodology
+
+When solving probability problems, follow this workflow:
+
+1. **Specify the Sample Space:** Define $\Omega$.
+2. **Specify the Probability Law:** Define how likelihood is distributed (often involves some assumptions, like "uniformity").
+3. **Identify the Event of Interest:** Define the subset $A$. _Tip: Use a picture/diagram whenever possible._
+4. **Calculate:** Sum the probabilities (discrete) or calculate the area/volume (continuous).
+
+## Discrete Example: Two Tetrahedral Dice
+
+Let each outcome have a probability of $1/16$.
+
+- If $X$ is the first roll: $P(X=1) = 4 \times \frac{1}{16} = \frac{1}{4}$
+- If $Z = \min(X, Y)$: $P(Z=2) = \frac{5}{16}$ (Outcomes: $(2,2), (2,3), (2,4), (3,2), (4,2)$)
+
+## Continuous Example: Dart Board
+
+Given a uniform probability law where **Probability = Area**:
+
+- $P(\{(x, y) \mid x + y \le 1/2\}) = \text{Area of the resulting triangle} = \frac{1}{2} \times \frac{1}{2} \times \frac{1}{2} = \frac{1}{8}$
+
+---
+
+## 6. Infinite Sample Spaces & Countable Additivity
+
+In discrete but infinite spaces (e.g., flipping a coin until "Heads" appears), we use the **Countable Additivity Axiom**:
+
+If $A_1, A_2, A_3, \dots$ is an infinite sequence of **disjoint** events, then:
+
+$$P\left(\bigcup_{i=1}^\infty A_i\right) = \sum_{i=1}^\infty P(A_i)$$
+
+- **Constraint:** This only holds for _countable_ sequences.
+- **Measure Theory:** The unit square or a real line is _uncountable_. Area is a legitimate law here as long as we don't try to assign probabilities to "pathological" or "strange" sets.
+
+---
+
+## 7. Interpretations of Probability
+
+| **Perspective**  | **Description**                                                        |
+| ---------------- | ---------------------------------------------------------------------- |
+| **Mathematical** | A branch of math where axioms lead to theorems.                        |
+| **Frequentist**  | Probability is the long-run frequency of an event (e.g., coin tosses). |
+| **Bayesian**     | Probability is a subjective degree of belief or betting preference.    |

@@ -3,6 +3,23 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug } from "@/lib/mdx";
 import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import remarkGfm from "remark-gfm";
+import Image from "next/image";
+
+const components = {
+  img: (props: any) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <Image
+      {...props}
+      width={800}
+      height={500}
+      className="rounded-lg shadow-md mx-auto"
+      alt={props.alt || "MDX Image"}
+    />
+  ),
+};
 
 // Helper to extract headings for TOC using Regex
 function getHeadings(source: string) {
@@ -52,9 +69,12 @@ export default async function GardenPost({
         <h1>{post.meta.title}</h1>
         <MDXRemote
           source={post.content}
+          components={components}
           options={{
             mdxOptions: {
+              remarkPlugins: [remarkMath, remarkGfm],
               rehypePlugins: [
+                rehypeKatex,
                 rehypeSlug,
                 [
                   rehypePrettyCode,
