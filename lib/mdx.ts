@@ -35,21 +35,36 @@ export function getGardenFiles(
  * @param {string[]} slugArray An array of strings representing the slug segments.
  * @returns {Promise<object|null>} An object containing the post's metadata, content, and slug, or null if the file is not found.
  */
+export interface PostMeta {
+  title?: string;
+  description?: string;
+  date?: string;
+  mtimeMs?: number;
+  maturity?: string;
+  completion?: number;
+  [key: string]: unknown;
+}
+
 export async function getPostBySlug(slugArray: string[]) {
   const slug = slugArray.join("/");
   const fullPath = path.join(contentDirectory, `${slug}.mdx`);
 
   if (!fs.existsSync(fullPath)) return null;
 
+  const stat = fs.statSync(fullPath);
+  const mtimeMs = stat.mtimeMs;
+
   const fileContents = fs.readFileSync(fullPath, "utf8");
   const { data, content } = matter(fileContents);
 
-  return { meta: data, content, slug };
+  const meta: PostMeta = { ...data, mtimeMs };
+
+  return { meta, content, slug };
 }
 
 /**
  * Retrieves all posts with their metadata.
- * @returns {Promise<object[]>} An array of post objects sorted by date (newest first).
+ * @returns {Promise<object[]>} An array of post objects sorted by modification date (newest first).
  */
 export async function getAllPosts() {
   const slugs = getGardenFiles();
@@ -65,12 +80,12 @@ export async function getAllPosts() {
     })
   );
 
-  // Filter out any nulls and sort by date
+  // Filter out any nulls and sort by modification date
   return posts
     .filter((post): post is NonNullable<typeof post> => post !== null)
     .sort((a, b) => {
-       const dateA = new Date(a.meta.date || 0).getTime();
-       const dateB = new Date(b.meta.date || 0).getTime();
+       const dateA = a.meta.mtimeMs || new Date(a.meta.date || 0).getTime();
+       const dateB = b.meta.mtimeMs || new Date(b.meta.date || 0).getTime();
        return dateB - dateA;
     });
 }

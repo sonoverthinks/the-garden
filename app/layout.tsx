@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "./components/Navbar";
+import CommandPalette from "./components/CommandPalette";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Navbar />
+        <CommandPalette />
         {children}
       </body>
     </html>
