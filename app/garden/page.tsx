@@ -18,21 +18,23 @@ export default async function GardenIndexPage() {
           </p>
         </header>
 
-        <div className="prose prose-stone prose-emerald max-w-none">
-          <h2 className="text-3xl font-headline font-bold text-primary mt-12 mb-6">Recent Additions</h2>
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <div key={post.slug} className="bg-surface-container-lowest rounded-2xl p-6 border-l-4 border-secondary-fixed-dim shadow-sm hover:shadow-md transition-shadow">
-                <Link href={`/garden/${post.slug}`}>
-                  <h3 className="font-headline text-2xl text-primary font-bold mb-2 hover:underline">
-                    {post.meta.title}
-                  </h3>
-                </Link>
-                <div className="flex items-center gap-4 text-sm text-on-surface-variant">
-                  <span className="material-symbols-outlined text-sm">schedule</span>
-                  <span>{new Date(post.meta.date).toLocaleDateString()}</span>
+        <div className="max-w-none">
+          <h2 className="text-2xl font-headline font-bold text-primary mt-8 mb-4">Recent Additions</h2>
+          <div className="space-y-3">
+            {posts.slice(0, 3).map((post) => (
+              <Link key={post.slug} href={`/garden/${post.slug}`} className="block group">
+                <div className="bg-surface-container-lowest rounded-xl p-6 border-l-4 border-secondary-fixed-dim shadow-sm hover:shadow-md transition-all cursor-pointer">
+                  <div className="flex justify-between items-start gap-4">
+                    <h3 className="font-headline text-xl text-primary font-bold group-hover:underline">
+                      {post.meta.title}
+                    </h3>
+                    <div className="flex items-center gap-2 text-xs text-on-surface-variant whitespace-nowrap pt-1">
+                      <span className="material-symbols-outlined text-xs">schedule</span>
+                      <span>{new Date(post.meta.date).toLocaleDateString()}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

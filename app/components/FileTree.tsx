@@ -14,18 +14,19 @@ function FileTreeNode({ node }: { node: TreeNode }) {
   if (!node.children) {
     // It's a file
     const isActive = pathname === `/garden/${node.slug}`;
+    const displayName = node.name.replace(/-/g, " ");
     return (
       <div className="pl-8 space-y-1">
         {isActive ? (
           <div className="px-3 py-1.5 text-sm text-primary font-semibold border-l-2 border-secondary-fixed-dim bg-secondary-container/10">
-            {node.name}
+            {displayName}
           </div>
         ) : (
           <Link
             href={`/garden/${node.slug}`}
             className="block px-3 py-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
           >
-            {node.name}
+            {displayName}
           </Link>
         )}
       </div>
