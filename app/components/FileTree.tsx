@@ -15,50 +15,52 @@ function FileTreeNode({ node }: { node: TreeNode }) {
     // It's a file
     const isActive = pathname === `/garden/${node.slug}`;
     return (
-      <li className="ml-4">
-        <Link
-          href={`/garden/${node.slug}`}
-          className={`block py-1 transition-colors ${
-            isActive
-              ? "text-blue-600 dark:text-blue-400 font-medium"
-              : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
-          }`}
-        >
-          {node.name}
-        </Link>
-      </li>
+      <div className="pl-8 space-y-1">
+        {isActive ? (
+          <div className="px-3 py-1.5 text-sm text-primary font-semibold border-l-2 border-secondary-fixed-dim bg-secondary-container/10">
+            {node.name}
+          </div>
+        ) : (
+          <Link
+            href={`/garden/${node.slug}`}
+            className="block px-3 py-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+          >
+            {node.name}
+          </Link>
+        )}
+      </div>
     );
   }
 
   // It's a folder
   return (
-    <li className="mt-1">
+    <div className="space-y-1">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center w-full text-left font-medium text-gray-900 dark:text-gray-100 py-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2"
+        className="group flex w-full items-center gap-3 px-3 py-2 rounded-xl hover:bg-surface-container-low cursor-pointer transition-all focus:outline-none"
       >
-        <span className="mr-2 text-xs opacity-50 transform transition-transform duration-200" style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)' }}>
-          ▼
+        <span className="material-symbols-outlined text-primary/60 text-lg">
+          {isOpen ? "folder_open" : "folder"}
         </span>
-        {node.name}
+        <span className="text-sm font-medium">{node.name}</span>
       </button>
       {isOpen && (
-        <ul className="ml-2 pl-2 border-l border-gray-200 dark:border-gray-700">
+        <div className="space-y-1">
           {node.children.map((child) => (
             <FileTreeNode key={child.name} node={child} />
           ))}
-        </ul>
+        </div>
       )}
-    </li>
+    </div>
   );
 }
 
 export default function FileTree({ tree }: { tree: TreeNode[] }) {
   return (
-    <ul className="space-y-1">
+    <div className="space-y-1">
       {tree.map((node) => (
         <FileTreeNode key={node.name} node={node} />
       ))}
-    </ul>
+    </div>
   );
 }
