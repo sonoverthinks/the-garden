@@ -9,10 +9,9 @@ import remarkGfm from "remark-gfm";
 import Image from "next/image";
 
 const components = {
-  img: (props: any) => (
-    // eslint-disable-next-line @next/next/no-img-element
+  img: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <Image
-      {...props}
+      src={typeof props.src === 'string' ? props.src : ""}
       width={800}
       height={500}
       className="rounded-lg shadow-md mx-auto"
