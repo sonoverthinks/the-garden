@@ -131,10 +131,13 @@ export default function Page() {
                 </p>
               </div>
               <div>
-                <button className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-3 rounded-xl font-bold tracking-wide flex items-center gap-3 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300">
+                <Link
+                  href="/garden"
+                  className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-8 py-3 rounded-xl font-bold tracking-wide inline-flex items-center gap-3 hover:shadow-lg hover:shadow-primary/20 transition-all duration-300"
+                >
                   Explore Garden
                   <span className="material-symbols-outlined text-sm">park</span>
-                </button>
+                </Link>
               </div>
             </div>
             <div className="relative min-h-[300px] overflow-hidden">

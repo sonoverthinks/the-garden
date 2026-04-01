@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Manrope, Newsreader } from "next/font/google";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import FAB from "./components/FAB";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 
@@ -40,7 +39,6 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Footer />
-        <FAB />
       </body>
     </html>
   );
