@@ -1,19 +1,13 @@
 import Image from "next/image";
 
-export default function AnalogPage() {
+export default function InstagramPage() {
   return (
     <main className="pt-16 pb-24 px-8 max-w-7xl mx-auto">
       {/* Header Section */}
       <header className="mb-20 max-w-3xl">
-        <div className="inline-block px-3 py-1 mb-6 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold tracking-widest uppercase">
-          Human Element
-        </div>
         <h1 className="font-headline text-5xl md:text-7xl font-light italic leading-tight text-primary mb-6">
-          The <span className="text-secondary">Analog</span> Scrapbook
+          The <span className="text-secondary">Instagram</span> Scrapbook
         </h1>
-        <p className="text-on-surface-variant text-lg md:text-xl leading-relaxed font-light">
-          A visual cross-section of the digital and physical. Where the cold precision of logic meets the warm, messy reality of creation.
-        </p>
       </header>
 
       {/* Masonry Gallery */}

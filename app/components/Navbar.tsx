@@ -10,7 +10,7 @@ export default function Navbar() {
     { href: "/", label: "Home" },
     { href: "/projects", label: "Projects" },
     { href: "/garden", label: "Garden" },
-    { href: "/analog", label: "Analog" },
+    { href: "/instagram", label: "Instagram" },
   ];
 
   return (
