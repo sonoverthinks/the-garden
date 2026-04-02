@@ -1,7 +1,39 @@
 import Image from "next/image";
 import Link from "next/link";
+import MusicCard from "./components/MusicCard";
+import { getLastPlayed } from "@/lib/spotify";
 
-export default function Page() {
+import fs from "fs";
+import path from "path";
+
+export const dynamic = "force-dynamic";
+
+export default async function Page() {
+  const trackData = await getLastPlayed();
+  
+  // Fetch Reading Data from local file
+  let readingData = {
+    title: "Designing Data-Intensive Apps",
+    author: "Martin Kleppmann",
+    status: "Chapter 4: Encoding & Evolution"
+  };
+
+  try {
+    const filePath = path.join(process.cwd(), "data", "reading.json");
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    readingData = JSON.parse(fileContent);
+  } catch (e) {
+    console.error("Error reading reading.json", e);
+  }
+
+  const track = trackData || {
+    title: "The Night We Met",
+    artist: "Lord Huron",
+    albumArt: "https://i.scdn.co/image/ab67616d0000b2730656d53823469a4734891b0c",
+    songUrl: "https://open.spotify.com/track/09mEucvYmY3Uun52acvIgc",
+    isPlaying: false,
+  };
+
   return (
     <main className="max-w-7xl mx-auto px-8 py-12">
       {/* Bento Grid Layout */}
@@ -47,27 +79,16 @@ export default function Page() {
                 <span className="flex h-2 w-2 rounded-full bg-secondary-fixed-dim animate-pulse"></span>
               </div>
               <h2 className="font-headline text-2xl text-on-surface leading-snug">
-                🟢 Currently reading: <span className="text-primary font-bold">Designing Data-Intensive Apps</span>
+                🟢 Currently reading: <span className="text-primary font-bold">{readingData.title}</span>
               </h2>
             </div>
             <div className="pt-4 flex items-center justify-between">
-              <span className="text-sm text-on-surface-variant font-medium">Chapter 4: Encoding &amp; Evolution</span>
+              <span className="text-sm text-on-surface-variant font-medium">{readingData.status}</span>
               <span className="material-symbols-outlined text-secondary">auto_stories</span>
             </div>
           </div>
 
-          {/* Small Callout Card */}
-          <div className="bg-primary-container rounded-xl p-8 text-on-primary flex items-center justify-between group cursor-pointer hover:bg-primary transition-colors duration-300">
-            <div>
-              <p className="font-label text-xs text-on-primary-container uppercase tracking-widest mb-1">
-                Upcoming Milestone
-              </p>
-              <h3 className="font-headline text-xl">The Winter Solstice Release</h3>
-            </div>
-            <span className="material-symbols-outlined text-secondary-fixed-dim group-hover:translate-x-1 transition-transform">
-              arrow_forward_ios
-            </span>
-          </div>
+          <MusicCard track={track} />
         </div>
 
         {/* Recent Activity Feed: Side column */}
