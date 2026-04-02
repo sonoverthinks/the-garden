@@ -88,3 +88,36 @@ body {
 .animate-music-bar {
   animation: music-bar 0.8s ease-in-out infinite;
 }
+
+.bento-card {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bento-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -15px rgba(45, 90, 39, 0.15);
+}
+
+.masonry-grid {
+  column-count: 1;
+  column-gap: 2rem;
+}
+@media (min-width: 768px) {
+  .masonry-grid {
+    column-count: 2;
+  }
+}
+@media (min-width: 1024px) {
+  .masonry-grid {
+    column-count: 3;
+  }
+}
+.masonry-item {
+  break-inside: avoid;
+  margin-bottom: 2.5rem;
+}
+
+.glass-herbarium {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
