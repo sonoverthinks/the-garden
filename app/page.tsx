@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MusicCard from "./components/MusicCard";
 import { getLastPlayed } from "@/lib/spotify";
+import { getLatestActivity, getRelativeTime } from "@/lib/github";
 
 import fs from "fs";
 import path from "path";
@@ -10,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Page() {
   const trackData = await getLastPlayed();
+  const activities = await getLatestActivity("sonoverthinks", 5);
   
   // Fetch Reading Data from local file
   let readingData = {
@@ -104,45 +106,47 @@ export default async function Page() {
           <div className="flex items-baseline justify-between">
             <h3 className="font-headline text-2xl">Chronicle</h3>
             <Link
-              href="#"
+              href="https://github.com/sonoverthinks"
+              target="_blank"
               className="font-label text-xs font-bold text-secondary uppercase tracking-widest hover:text-primary transition-colors"
             >
-              View All
+              GitHub
             </Link>
           </div>
           <div className="space-y-6">
-            {/* Activity Item */}
-            <div className="flex gap-4 group">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary">potted_plant</span>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-on-surface">
-                  New specimen cataloged: <span className="italic">Monstera Adansonii</span>
-                </p>
-                <p className="text-xs text-on-surface-variant">2 hours ago in Private Garden</p>
-              </div>
-            </div>
-            {/* Activity Item */}
-            <div className="flex gap-4 group">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary">edit_note</span>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-on-surface">Draft updated: &quot;The Ethics of Bio-Digital Twinning&quot;</p>
-                <p className="text-xs text-on-surface-variant">Yesterday at 4:32 PM</p>
-              </div>
-            </div>
-            {/* Activity Item */}
-            <div className="flex gap-4 group">
-              <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary">cloud_done</span>
-              </div>
-              <div className="space-y-1">
-                <p className="text-sm font-medium text-on-surface">Archive synchronized with Global Conservatory</p>
-                <p className="text-xs text-on-surface-variant">Dec 14, 2023</p>
-              </div>
-            </div>
+            {activities.map((activity) => (
+              <a
+                key={activity.id}
+                href={activity.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-4 group cursor-pointer"
+              >
+                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center group-hover:bg-primary transition-colors duration-300">
+                  <span className="material-symbols-outlined text-primary group-hover:text-white transition-colors text-xl">
+                    folder
+                  </span>
+                </div>
+                <div className="space-y-1 min-w-0">
+                  <p className="text-sm font-medium text-on-surface truncate group-hover:text-primary transition-colors">
+                    {activity.repo}
+                  </p>
+                  <p className="text-xs text-on-surface-variant line-clamp-1 italic">
+                    Pushed {getRelativeTime(activity.date)}
+                  </p>
+                  {activity.message && (
+                    <p className="text-[10px] text-on-surface-variant/70 line-clamp-1 mt-1">
+                      {activity.message}
+                    </p>
+                  )}
+                </div>
+              </a>
+            ))}
+            {activities.length === 0 && (
+              <p className="text-sm text-on-surface-variant italic text-center py-4">
+                No recent activity found.
+              </p>
+            )}
           </div>
         </div>
 
