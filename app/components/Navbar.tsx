@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="flex justify-between items-center px-8 py-4 max-w-7xl mx-auto">
         <div className="flex items-center gap-8">
           <Link href="/">
-            <span className="text-xl font-headline font-bold text-emerald-900">The Botanical Archive</span>
+            <span className="text-xl font-headline font-bold text-emerald-900">sonoverthinks</span>
           </Link>
           <div className="hidden md:flex gap-6 items-center">
             {links.map((link) => {

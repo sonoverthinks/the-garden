@@ -51,20 +51,28 @@ export default async function Page() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/40 to-transparent"></div>
           </div>
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="w-8 h-[2px] bg-secondary-fixed-dim"></span>
-              <span className="font-label text-xs uppercase tracking-[0.2em] text-secondary-fixed-dim font-bold">
-                Curator Profile
-              </span>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-8 h-[2px] bg-secondary-fixed-dim"></span>
+                <span className="font-label text-xs uppercase tracking-[0.2em] text-secondary-fixed-dim font-bold">
+                  Curator Profile
+                </span>
+              </div>
+              <h1 className="font-headline text-5xl md:text-6xl text-white tracking-tight leading-tight max-w-lg">
+                Son <span className="italic text-secondary-fixed-dim">Dao</span>
+              </h1>
+              <p className="text-on-primary-container font-body text-xl max-w-md">
+                This garden is my laboratory.
+              </p>
             </div>
-            <h1 className="font-headline text-5xl md:text-6xl text-white tracking-tight leading-tight max-w-lg">
-              Elena <span className="italic text-secondary-fixed-dim">Vance</span>
-            </h1>
-            <p className="text-on-primary-container font-body text-lg max-w-md">
-              A computational biologist and digital archivist exploring the symbiosis between organic systems and
-              architectural algorithms. This garden is my laboratory.
-            </p>
+            <Link
+              href="#"
+              className="font-headline italic text-secondary-fixed-dim hover:text-white transition-colors duration-300 text-xl pb-1 w-fit flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+              About me
+            </Link>
           </div>
         </div>
 
