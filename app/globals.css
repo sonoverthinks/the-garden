@@ -99,7 +99,7 @@ body {
 
 .masonry-grid {
   column-count: 1;
-  column-gap: 2rem;
+  column-gap: 1.5rem;
 }
 @media (min-width: 768px) {
   .masonry-grid {
@@ -113,7 +113,7 @@ body {
 }
 .masonry-item {
   break-inside: avoid;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .glass-herbarium {
