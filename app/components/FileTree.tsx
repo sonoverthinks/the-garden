@@ -7,24 +7,23 @@ import type { TreeNode } from "@/lib/mdx";
 
 function FileTreeNode({ node }: { node: TreeNode }) {
   const pathname = usePathname();
-  // Auto-expand if a child is active could be a nice enhancement, 
-  // but for now default open is fine.
-  const [isOpen, setIsOpen] = useState(true);
+  // Folders are now collapsed by default as requested.
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!node.children) {
     // It's a file
     const isActive = pathname === `/garden/${node.slug}`;
     const displayName = node.name.replace(/-/g, " ");
     return (
-      <div className="pl-8 space-y-1">
+      <div className="pl-6">
         {isActive ? (
-          <div className="px-3 py-1.5 text-sm text-primary font-semibold border-l-2 border-secondary-fixed-dim bg-secondary-container/10">
+          <div className="px-3 py-1 text-sm text-primary font-semibold border-l-2 border-secondary-fixed-dim bg-secondary-container/10 hover:cursor-pointer">
             {displayName}
           </div>
         ) : (
           <Link
             href={`/garden/${node.slug}`}
-            className="block px-3 py-1.5 text-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+            className="block px-3 py-1 text-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
           >
             {displayName}
           </Link>
@@ -35,18 +34,18 @@ function FileTreeNode({ node }: { node: TreeNode }) {
 
   // It's a folder
   return (
-    <div className="space-y-1">
+    <div>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="group flex w-full items-center gap-3 px-3 py-2 rounded-xl hover:bg-surface-container-low cursor-pointer transition-all focus:outline-none"
+        className="group flex w-full items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-all focus:outline-none"
       >
-        <span className="material-symbols-outlined text-primary/60 text-lg">
+        <span className="material-symbols-outlined text-primary/60 text-base">
           {isOpen ? "folder_open" : "folder"}
         </span>
         <span className="text-sm font-medium">{node.name}</span>
       </button>
       {isOpen && (
-        <div className="space-y-1">
+        <div className="ml-3 pl-3 border-l border-outline-variant/10">
           {node.children.map((child) => (
             <FileTreeNode key={child.name} node={child} />
           ))}

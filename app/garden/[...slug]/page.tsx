@@ -84,6 +84,49 @@ function getHeadings(source: string) {
   });
 }
 
+function BuddingTag({ dateStr }: { dateStr: string }) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffDays = Math.max(0, Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24)));
+  
+  // Progression: 0 days = 100%, 90+ days = 20%
+  const progress = Math.max(20, Math.min(100, 100 - (diffDays / 90) * 80)); 
+  
+  let barColor = "bg-secondary-fixed-dim";
+  let label = "Budding";
+
+  if (diffDays <= 7) {
+    barColor = "bg-primary"; // Deep Green
+    label = "Sprouting 🌿";
+  } else if (diffDays <= 30) {
+    barColor = "bg-primary-container"; // Medium Green
+    label = "Budding 🌱";
+  } else if (diffDays <= 90) {
+    barColor = "bg-primary-fixed-dim"; // Soft Green
+    label = "Growing 🌳";
+  } else {
+    barColor = "bg-surface-container-highest"; // Muted Gray-Green
+    label = "Evergreen 🌲";
+  }
+
+  return (
+    <div className="flex items-center gap-4">
+      <div className="px-4 py-1.5 rounded-full bg-secondary-container/20 flex items-center gap-3 border border-secondary-container/30">
+        <span className="text-xs font-bold uppercase tracking-wider text-primary">{label}</span>
+        <div className="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+          <div 
+            className={`h-full ${barColor} transition-all duration-1000`} 
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+      <span className="text-xs text-on-surface-variant font-medium">
+        Last tended: {date.toLocaleDateString()}
+      </span>
+    </div>
+  );
+}
+
 export default async function GardenPost({
   params,
 }: {
@@ -101,17 +144,7 @@ export default async function GardenPost({
       {/* --- CENTER COLUMN: Content (6 cols out of 9) --- */}
       <article className="md:col-span-6 space-y-8">
         <header className="space-y-4">
-          <div className="flex items-center gap-4">
-            <div className="px-4 py-1.5 rounded-full bg-secondary-container/40 flex items-center gap-2">
-              <span className="text-sm">Budding 🌿</span>
-              <div className="w-16 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
-                <div className="h-full bg-secondary-fixed-dim w-3/5 rounded-full"></div>
-              </div>
-            </div>
-            <span className="text-xs text-on-surface-variant font-medium">
-              Last tended: {new Date(post.meta.lastUpdated || post.meta.date).toLocaleDateString()}
-            </span>
-          </div>
+          <BuddingTag dateStr={post.meta.lastUpdated || post.meta.date} />
           <h1 className="text-6xl font-headline font-extrabold tracking-tight text-primary leading-[1.1]">
             {post.meta.title}
           </h1>
