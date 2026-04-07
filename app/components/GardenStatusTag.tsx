@@ -22,7 +22,8 @@ export default function GardenStatusTag({ dateStr }: { dateStr: string }) {
     styles = "bg-tertiary-fixed-dim text-on-tertiary-fixed-variant";
   } else {
     label = "Wintering 🍂";
-    styles = "bg-tertiary/10 text-tertiary font-medium border border-tertiary/20";
+    styles =
+      "bg-tertiary/10 text-tertiary font-medium border border-tertiary/20";
   }
 
   return (

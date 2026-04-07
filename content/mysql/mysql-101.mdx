@@ -1,0 +1,342 @@
+---
+title: "MySQL 101"
+description: "A reference covering core MySQL concepts."
+date: "2026-04-06"
+lastUpdated: "2026-04-06"
+---
+
+## Databases
+
+```sql
+-- Connect
+mysql -u root -p
+
+-- Database commands
+SHOW DATABASES;
+CREATE DATABASE <name>;
+DROP DATABASE <name>;
+USE <name>;
+SELECT database();          -- return the current db
+```
+
+## Data types
+
+There are three broad categories: numeric, string, and date types. The two you'll use most often:
+
+```sql
+INT          -- whole number, max signed value 2,147,483,647 (2^31 − 1)
+VARCHAR(n)   -- variable-length string with a max of n characters
+```
+
+## Tables
+
+```sql
+-- Inspect
+SHOW TABLES;
+SHOW COLUMNS FROM <table>;
+DESC <table>;
+
+-- Drop
+DROP TABLE <table>;
+```
+
+## Inserting data
+
+```sql
+-- Single insert
+INSERT INTO cats (name, age) VALUES ('Jetson', 7);
+
+-- Multi insert
+INSERT INTO cats (name, age) VALUES ('Beth', 3), ('Turkey', 1), ('Ugly', 11);
+
+-- Check results
+SELECT * FROM cats;
+```
+
+Column order in the statement determines value order — keep them in sync.
+
+## Constraints
+
+```sql
+-- Prevent NULLs
+name VARCHAR(40) NOT NULL
+
+-- Default values
+name VARCHAR(50) DEFAULT 'unnamed'
+name VARCHAR(50) NOT NULL DEFAULT 'unnamed'   -- no NULL, fallback to default
+
+-- Primary key
+cat_id INT AUTO_INCREMENT,
+PRIMARY KEY (cat_id)                          -- PRIMARY KEY implies NOT NULL
+
+-- Unique
+phone VARCHAR(15) NOT NULL UNIQUE
+
+-- Named check constraint
+CONSTRAINT age_not_negative CHECK (age >= 0)
+
+-- Composite unique
+CONSTRAINT name_address UNIQUE (name, address)
+```
+
+## Quotation marks
+
+MySQL accepts both `''` and `""`, but other SQL flavours may not. Prefer single quotes.
+
+```sql
+INSERT INTO shops (name) VALUES ('mario\'s pizza');   -- escape with backslash
+INSERT INTO shops (name) VALUES ('she said "haha"');  -- double inside single is fine
+```
+
+## CRUD
+
+### Read
+
+```sql
+SELECT * FROM <table>;
+SELECT name, age FROM <table>;
+SELECT name WHERE age > 3;
+SELECT cat_id AS id FROM cats;   -- alias
+```
+
+### Update
+
+```sql
+UPDATE <table> SET breed = 'shorthair' WHERE breed = 'Tabby';
+```
+
+> Always run a `SELECT` with the same `WHERE` clause before updating — verify what you'll touch.
+
+### Delete
+
+```sql
+DELETE FROM <table> WHERE name = 'egg';
+DELETE FROM <table>;   -- empties the table, table still exists
+```
+
+## String functions
+
+```sql
+SELECT CONCAT(x, y, z) FROM <table>;
+SELECT CONCAT_WS(' ', first, last) AS full_name FROM <table>;
+
+SELECT SUBSTRING('Hello World', 1, 5);                        -- index starts at 1
+SELECT CONCAT(SUBSTRING(title, 1, 10), '...') AS short_title FROM books;
+
+SELECT REPLACE(title, ' ', '-') FROM books;
+SELECT REVERSE(author_fname) FROM books;
+SELECT CHAR_LENGTH('Hello World');
+SELECT UPPER(title), LOWER(title) FROM books;
+
+-- Others
+SELECT INSERT('Hello Bobby', 6, 0, 'There');
+SELECT LEFT('omghahalol!', 3);
+SELECT RIGHT('omghahalol!', 4);
+SELECT REPEAT('ha', 4);
+SELECT TRIM('  pickle  ');
+```
+
+## Refining selections
+
+```sql
+SELECT DISTINCT author_lname FROM books;
+
+-- ORDER BY (default ASC)
+SELECT * FROM books ORDER BY author_lname, author_fname;
+
+-- LIMIT
+SELECT * FROM books LIMIT 5;
+
+-- LIKE (% = any chars, _ = single char)
+SELECT * FROM books WHERE author_fname LIKE '%da%';
+SELECT * FROM books WHERE title LIKE '%\%%';   -- escape literal %
+```
+
+## Aggregate functions
+
+```sql
+SELECT COUNT(*) FROM books;
+SELECT SUM(pages) FROM books;
+SELECT AVG(pages) FROM books;
+SELECT MAX(pages), MIN(pages) FROM books;
+
+-- GROUP BY
+SELECT author_lname, COUNT(*) FROM books GROUP BY author_lname;
+SELECT author_lname, MIN(released_year) FROM books GROUP BY author_lname;
+
+-- HAVING filters groups (use WHERE to filter rows before grouping)
+SELECT author_lname, COUNT(*) FROM books GROUP BY author_lname HAVING COUNT(*) > 1;
+
+-- Subquery
+SELECT title, released_year FROM books
+WHERE released_year = (SELECT MIN(released_year) FROM books);
+```
+
+## Logical operators
+
+```sql
+WHERE released_year != 2017
+WHERE title NOT LIKE '%e%'
+WHERE released_year > 2010 AND author_lname = 'Eggers'
+WHERE pages < 200 OR title LIKE '%stories%'
+WHERE released_year BETWEEN 2004 AND 2014
+WHERE HOUR(birthtime) BETWEEN 12 AND 16
+WHERE author_lname IN ('Carver', 'Lahiri', 'Smith')
+WHERE author_lname IS NULL
+```
+
+### CASE
+
+```sql
+SELECT title, released_year,
+  CASE
+    WHEN released_year >= 2000 THEN 'modern lit'
+    ELSE '20th century lit'
+  END AS genre
+FROM books;
+```
+
+## ALTER TABLE
+
+```sql
+ALTER TABLE companies ADD COLUMN phone VARCHAR(15);
+ALTER TABLE companies DROP COLUMN phone;
+ALTER TABLE companies MODIFY company_name VARCHAR(100) DEFAULT 'unknown';
+RENAME TABLE companies TO suppliers;
+```
+
+## Relationships and joins
+
+### Schema
+
+```sql
+CREATE TABLE customers (
+  id         INT PRIMARY KEY AUTO_INCREMENT,
+  first_name VARCHAR(50),
+  last_name  VARCHAR(50),
+  email      VARCHAR(50)
+);
+
+CREATE TABLE orders (
+  id          INT PRIMARY KEY AUTO_INCREMENT,
+  order_date  DATE,
+  amount      DECIMAL(8,2),
+  customer_id INT,
+  FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+```
+
+### INNER JOIN
+
+Returns only rows with a match in both tables.
+
+```sql
+SELECT first_name, last_name, SUM(amount) AS total
+FROM customers
+JOIN orders ON orders.customer_id = customers.id
+GROUP BY first_name, last_name
+ORDER BY total;
+```
+
+### LEFT JOIN
+
+All rows from the left table; `NULL` for unmatched right-table columns.
+
+```sql
+SELECT first_name, last_name, order_date, amount
+FROM customers
+LEFT JOIN orders ON orders.customer_id = customers.id;
+```
+
+### IFNULL
+
+```sql
+SELECT first_name, IFNULL(title, 'MISSING'), IFNULL(grade, 0)
+FROM students
+LEFT JOIN papers ON papers.student_id = students.id;
+```
+
+### Many-to-many
+
+Always use a junction table with foreign keys pointing to each main table.
+
+## Views
+
+A named, saved query. Useful for reusing complex `SELECT`s. Some views are insertable, but you generally can't `DELETE` through a view.
+
+```sql
+-- Create
+CREATE VIEW full_reviews AS
+  SELECT ...;
+
+-- Use like a table
+SELECT * FROM full_reviews;
+
+-- Modify
+ALTER VIEW full_reviews AS
+  SELECT ...;
+```
+
+## Window functions
+
+Like aggregate functions, but they produce a result for _each row_ rather than collapsing rows into one. The `OVER()` clause defines the window.
+
+### Basic syntax
+
+```sql
+-- Empty OVER() = window is the entire result set
+SELECT emp_no, salary, AVG(salary) OVER() FROM employees;
+
+-- PARTITION BY = split into sub-windows by column
+SELECT emp_no, department, salary,
+  AVG(salary) OVER(PARTITION BY department) AS dept_avg
+FROM employees;
+
+-- ORDER BY inside OVER() creates a rolling/cumulative result
+SELECT emp_no, department, salary,
+  SUM(salary) OVER(PARTITION BY department ORDER BY salary) AS rolling_dept_salary
+FROM employees;
+```
+
+### Ranking functions
+
+```sql
+RANK()        -- skips ranks after ties (1, 2, 2, 4)
+DENSE_RANK()  -- no gaps after ties (1, 2, 2, 3)
+ROW_NUMBER()  -- always unique, arbitrary tiebreak
+
+SELECT department, salary,
+  RANK() OVER(ORDER BY salary DESC) AS overall_rank
+FROM employees;
+```
+
+### NTILE
+
+```sql
+-- Divide rows into N buckets; returns which bucket each row falls in
+SELECT emp_no, department, salary,
+  NTILE(4) OVER(PARTITION BY department ORDER BY salary DESC) AS quartile
+FROM employees;
+```
+
+### Value functions
+
+```sql
+FIRST_VALUE(col) OVER(...)    -- first value in the window
+LAST_VALUE(col)  OVER(...)    -- last value in the window
+NTH_VALUE(col, n) OVER(...)   -- nth value in the window
+
+SELECT emp_no, department, salary,
+  FIRST_VALUE(emp_no) OVER(PARTITION BY department ORDER BY salary DESC) AS highest_paid
+FROM employees;
+```
+
+### LAG and LEAD
+
+`LAG` looks at the previous row; `LEAD` looks at the next row. Useful for row-over-row comparisons.
+
+```sql
+SELECT emp_no, salary,
+  salary - LAG(salary) OVER(ORDER BY salary DESC) AS salary_diff
+FROM employees;
+```

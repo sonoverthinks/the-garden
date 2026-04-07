@@ -24,7 +24,7 @@ export default function MusicCard({ track }: { track: Track }) {
         rel="noopener noreferrer"
         className="flex gap-4 group cursor-pointer"
       >
-        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-emerald-900/5">
+        <div className="shrink-0 w-12 h-12 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-emerald-900/5">
           <Image
             src={track.albumArt}
             alt={track.title}
