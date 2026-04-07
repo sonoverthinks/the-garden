@@ -1,0 +1,68 @@
+---
+title: "Feature Branch Workflow"
+description: "The goal is to keep the main branch stable and deployable at all times."
+date: "2026-04-06"
+lastUpdated: "2026-04-06"
+---
+
+## 1. Start with an up-to-date `main`
+
+```bash
+# Switch to the main branch
+git checkout main
+
+# Pull the latest changes from remote
+git pull origin main
+```
+
+## 2. Create your feature branch
+
+```bash
+# Create and switch to a new branch
+git checkout -b feature/your-feature-name
+```
+
+## 3. The development loop
+
+```bash
+# Check which files have changed
+git status
+
+# Stage specific files (or . for all)
+git add <file-name>
+
+# Commit with a clear, descriptive message
+git commit -m "Add descriptive message about what you changed"
+```
+
+## 4. Push to remote
+
+```bash
+# Push the branch to remote
+git push origin feature/your-feature-name
+```
+
+## 5. Create a pull request
+
+Leave the terminal and go to your Git hosting platform (GitHub, GitLab, etc.) to open a PR. This lets teammates review your code and triggers automated tests.
+
+```bash
+# Or use the CLI — creates a PR for the current branch
+gh pr create --title "My feature" --body "Detailed explanation here"
+```
+
+> The `gh` CLI opens the PR without leaving the terminal.
+
+## 6. Clean up after merge
+
+```bash
+# Switch back to main and pull merged changes
+git checkout main
+git pull origin main
+
+# Delete the local branch — it's no longer needed
+git branch -d feature/your-feature-name
+
+# (Optional) Delete the remote branch too
+git push origin --delete feature/your-feature-name
+```

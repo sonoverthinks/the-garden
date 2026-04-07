@@ -1,6 +1,6 @@
 ---
 title: "Git 101"
-description: "Basic Git commands"
+description: "From checkpoints to time travel."
 date: "2026-04-06"
 lastUpdated: "2026-04-06"
 ---
@@ -49,9 +49,16 @@ rm -rf <dir> # Remove directory recursively
 
 ## Git Workflow
 
-1. **Working Directory** → `git add` → **Staging Area** → `git commit` → **Repository**
-2. Always run `git status` to check the state of your repo.
-3. Avoid nesting repositories inside each other.
+Think of Git as a three-stage process for your changes:
+
+1.  **Working Directory**: Where you actually edit your files.
+2.  **Staging Area** (`git add`): A "loading dock" where you group together the changes you want to save.
+3.  **Local Repository** (`git commit`): Where Git permanently saves those grouped changes as a "checkpoint."
+
+### Pro-tips
+
+- Always run `git status` to see where your files are in this process.
+- Avoid "nesting" repositories (putting a repo inside another repo).
 
 ## Adding & Committing Changes
 
