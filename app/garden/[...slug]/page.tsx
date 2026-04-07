@@ -64,11 +64,11 @@ export default async function GardenPost({
       {/* --- RIGHT COLUMN: Table of Contents & Related (3 cols out of 9) --- */}
       <aside className="md:col-span-3">
         {/* TOC */}
-        <section className="sticky top-24 p-6 glass-panel rounded-2xl border border-white/40 shadow-xl shadow-primary/5">
-          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-6">
+        <section className="sticky top-24 p-6 glass-panel rounded-2xl border border-white/40 shadow-xl shadow-primary/5 flex flex-col max-h-[calc(100vh-8rem)]">
+          <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-on-surface-variant/60 mb-6 flex-shrink-0">
             Table of Contents
           </h3>
-          <nav className="space-y-4">
+          <nav className="space-y-4 overflow-y-auto custom-scrollbar pr-2">
             {headings
               .filter((heading) => heading.level === 2)
               .map((heading) => (
