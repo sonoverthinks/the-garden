@@ -2,9 +2,10 @@ import Image from "next/image";
 
 const INSTAGRAM_POSTS = [
   {
-    src: "https://lh3.googleusercontent.com/aida-public/AB6AXuCpNxdbpuL9ZCHmvWxm1wAXIfEPGboRdRcaED61j68RuQtjziMuaaAYw2nXMpgGQiob6WBsljXZcBBC2xu92K-cT6C_iwnq7aQoG_fMYCQjjkEuRYq-ILCoSru-5ZnMVvEd0Wp-HfPVQIu70g-MStI5sURqLxnDeJo1IqMN9MBGcrHXCvVxR3bYFla1yt0dKI2IfXU7ME8xoyGfg2mJeTHW8VGXWMIFqmwFQnYgTsFpOyEHskoS6QsxGAUv8Ba6iKHlz1qj5Bf-npR6",
-    alt: "Digital Workspace",
-    aspect: "aspect-4/5",
+    src: "https://res.cloudinary.com/dz2ur1rtv/image/upload/v1767740921/cbu2eybo6pbdm0dj0jtg.jpg",
+    alt: "Shark Biting Cable",
+    aspect: "aspect-square",
+    hasBorder: true,
   },
   {
     src: "https://lh3.googleusercontent.com/aida-public/AB6AXuDqamtJLG5rFRV3Ac8K7bfkKuh2IE25Tk0xA0WWt6b0UDuYu4QxIP7Hw2HYS_QY_HqJPhdM274SzienSCjvl4xf7ZIHMMchM0ucaj-vK2azwWa2c-7BNPPcL_fLGEt4OPYKuYjdBLzrF6Ay0YhMF-6aoQf_OGjn6mqnaCa01ODEsQY2qvXMYva4ApL6jsx7Mi4Fsw4lfDl7iyT3F46FxKp-2GhClXn800RT5LP7ET7hEs392suPjYTUoJNC85UlZefRCtI2V85gqnFI",
@@ -36,7 +37,8 @@ const INSTAGRAM_POSTS = [
 ];
 
 export default function InstagramPage() {
-  const cardBaseClasses = "glass-herbarium p-3 rounded-xl shadow-[0_12px_40px_rgba(25,28,26,0.06)] transition-all duration-500 hover:-translate-y-1";
+  const cardBaseClasses =
+    "glass-herbarium p-3 rounded-xl shadow-[0_12px_40px_rgba(25,28,26,0.06)] transition-all duration-500 hover:-translate-y-1";
 
   return (
     <main className="pt-16 pb-24 px-8 max-w-7xl mx-auto">
@@ -44,8 +46,12 @@ export default function InstagramPage() {
       <div className="masonry-grid">
         {INSTAGRAM_POSTS.map((post, index) => (
           <div key={index} className="masonry-item group">
-            <div className={`${cardBaseClasses} ${post.hasBorder ? 'border-t-2 border-secondary-fixed-dim' : ''}`}>
-              <div className={`relative overflow-hidden rounded-lg ${post.aspect}`}>
+            <div
+              className={`${cardBaseClasses} ${post.hasBorder ? "border-t-2 border-secondary-fixed-dim" : ""}`}
+            >
+              <div
+                className={`relative overflow-hidden rounded-lg ${post.aspect}`}
+              >
                 <Image
                   alt={post.alt}
                   className="object-cover w-full h-full transition-all duration-700"

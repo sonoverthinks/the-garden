@@ -16,8 +16,8 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "Home - Sunlit Hub",
-  description: "The Botanical Archive",
+  title: "The Botanical Archive",
+  description: "A nonlinear spatial database for long-term research",
 };
 
 export default function RootLayout({

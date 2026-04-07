@@ -21,7 +21,7 @@ export default async function GardenIndexPage() {
         <div className="max-w-none">
           <h2 className="text-2xl font-headline font-bold text-primary mt-8 mb-4">Recent Additions</h2>
           <div className="space-y-3">
-            {posts.slice(0, 3).map((post) => (
+            {posts.slice(0, 5).map((post) => (
               <Link key={post.slug} href={`/garden/${post.slug}`} className="block group">
                 <div className="bg-surface-container-lowest rounded-xl p-6 border-l-4 border-secondary-fixed-dim shadow-sm hover:shadow-md transition-all cursor-pointer">
                   <div className="flex justify-between items-start gap-4">
