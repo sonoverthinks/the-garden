@@ -112,3 +112,34 @@ export function getGardenTree(): TreeNode[] {
 
   return tree;
 }
+
+/**
+ * Helper to extract headings for TOC using Regex
+ */
+export function getHeadings(source: string) {
+  const headingLines = source
+    .split("\n")
+    .filter((line) => line.match(/^#{1,3}\s/));
+
+  const seenIds: Record<string, number> = {};
+
+  return headingLines.map((raw) => {
+    const text = raw.replace(/^#{1,3}\s/, "");
+    const level = raw.match(/^#{1,3}/)?.[0].length;
+    // Create a slug for the ID (must match what rehype-slug does)
+    let id = text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
+
+    if (seenIds[id]) {
+      const count = seenIds[id];
+      seenIds[id] = count + 1;
+      id = `${id}-${count}`;
+    } else {
+      seenIds[id] = 1;
+    }
+
+    return { text, level, id };
+  });
+}
