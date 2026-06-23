@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import GithubSlugger from "github-slugger";
 
 const contentDirectory = path.join(process.cwd(), "content");
 
@@ -121,24 +122,12 @@ export function getHeadings(source: string) {
     .split("\n")
     .filter((line) => line.match(/^#{1,3}\s/));
 
-  const seenIds: Record<string, number> = {};
+  const slugger = new GithubSlugger();
 
   return headingLines.map((raw) => {
     const text = raw.replace(/^#{1,3}\s/, "");
     const level = raw.match(/^#{1,3}/)?.[0].length;
-    // Create a slug for the ID (must match what rehype-slug does)
-    let id = text
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "");
-
-    if (seenIds[id]) {
-      const count = seenIds[id];
-      seenIds[id] = count + 1;
-      id = `${id}-${count}`;
-    } else {
-      seenIds[id] = 1;
-    }
+    const id = slugger.slug(text);
 
     return { text, level, id };
   });

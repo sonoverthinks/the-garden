@@ -1,0 +1,216 @@
+---
+title: Python Data Types
+description: Core built-in data types in Python, what they are, how to use them, and when each one fits.
+date: 2026-06-23
+lastUpdated: 2026-06-23
+---
+
+## Why data types matter
+
+Every value in Python has a type. The type determines what you can _do_ with that value: whether you can add it, loop over it, change it after creation, or use it as a dictionary key. Get comfortable with these and most of the language opens up.
+
+You can always check a value's type with the built-in `type()` function:
+
+```python
+type(7)        # <class 'int'>
+type("apple")  # <class 'str'>
+```
+
+## 1. Numeric types
+
+### `int` (whole numbers)
+
+```python
+apples = 6
+oranges = 14
+```
+
+### `float` (decimal numbers)
+
+```python
+price = 1.29
+weight = 4.5
+```
+
+Watch out: floats have precision quirks.
+
+```python
+0.1 + 0.2  # 0.30000000000000004, not 0.3
+```
+
+This isn't a Python bug, it's how binary floating-point math works in basically every language. If you need exact decimal math (money, for example), use the `decimal` module instead.
+
+### Quick arithmetic refresher
+
+```python
+9 // 2   # 4   (floor division, drops the remainder)
+9 % 2    # 1   (modulo, gives you the remainder)
+9 ** 2   # 81  (exponent)
+```
+
+## 2. str (text)
+
+Strings are sequences of characters, written with single or double quotes.
+
+```python
+fruit = "banana"
+```
+
+### Common operations
+
+```python
+fruit.upper()       # "BANANA"
+len(fruit)           # 6
+fruit[0]             # "b"        (indexing)
+fruit[:3]            # "ban"      (slicing)
+```
+
+### f-strings (the modern way to build strings)
+
+```python
+fruit = "apple"
+price = 2
+print(f"{fruit} costs ${price}")
+# apple costs $2
+```
+
+Strings are **immutable**, once created, you can't change a string in place. Every "modification" actually returns a brand-new string.
+
+```python
+name = "apple"
+name.upper()
+print(name)  # still "apple", the original wasn't changed
+name = name.upper()  # now name is reassigned to "APPLE"
+```
+
+## 3. bool (True/False)
+
+```python
+is_ripe = True
+is_rotten = False
+```
+
+Booleans are actually a subtype of `int` under the hood (`True == 1`, `False == 0`), which is a fun fact more than something you'll rely on day to day.
+
+```python
+count = 5
+has_fruit = count > 0   # True
+```
+
+## 4. None (the absence of a value)
+
+`None` represents "nothing here." It's its own type (`NoneType`) and is commonly used as a placeholder before a value is known.
+
+```python
+favorite_fruit = None  # not decided yet
+```
+
+## 5. Collection types
+
+### `list` (ordered, mutable, allows duplicates)
+
+Use a list when you have an ordered sequence of things you might need to change later.
+
+```python
+fruits = ["apple", "banana", "pear"]
+fruits.append("grape")
+fruits[0] = "kiwi"  # lists ARE mutable, this works fine
+```
+
+Lists support indexing and slicing just like strings:
+
+```python
+fruits[0]    # first item
+fruits[-1]   # last item
+fruits[:2]   # first two items
+```
+
+### `tuple` (ordered, immutable, allows duplicates)
+
+Use a tuple when the data shouldn't change.
+
+```python
+point = (3, 4)
+
+point[0] = 5  # TypeError: tuples can't be modified after creation
+```
+
+Tuples are also what gets used for quick multi-assignment:
+
+```python
+x, y = 3, 4
+```
+
+### `dict` (key/value pairs)
+
+Use a dictionary when you want to look something up by a name rather than a position.
+
+```python
+fruit = {
+    "name": "apple",
+    "color": "red"
+}
+
+fruit["color"]          # "red"
+fruit["color"] = "green"  # update a value
+fruit["price"] = 2        # add a new key
+```
+
+Useful dict methods:
+
+```python
+fruit.keys()    # dict_keys(['name', 'color', 'price'])
+fruit.values()  # dict_values(['apple', 'green', 2])
+fruit.get("size", "unknown")  # "unknown", safe lookup with a default
+```
+
+### `set` (unordered, unique values only)
+
+Use a set when you only care about _membership_ and want duplicates automatically removed.
+
+```python
+fruits = {"apple", "banana", "apple"}
+print(fruits)
+# {"apple", "banana"}, the duplicate "apple" collapses to one
+
+"banana" in fruits  # True, fast membership check
+```
+
+## Mutability: the distinction that actually matters
+
+This is the concept that trips people up most, so it's worth calling out directly.
+
+| Type                                   | Mutable? |
+| -------------------------------------- | -------- |
+| `int`, `float`, `bool`, `str`, `tuple` | No       |
+| `list`, `dict`, `set`                  | Yes      |
+
+"Mutable" means you can change the contents without creating a new object. This matters a lot once you start passing values into functions or assigning one variable to another:
+
+```python
+a = ["apple", "pear"]
+b = a          # b points to the SAME list as a
+b.append("grape")
+print(a)       # ["apple", "pear", "grape"], a changed too, same object!
+```
+
+Compare with an immutable type:
+
+```python
+x = "apple"
+y = x
+y = y.upper()
+print(x)       # "apple", unaffected, because strings can't be mutated in place
+```
+
+## Checking and converting types
+
+```python
+type(point)              # check a type
+isinstance(point, tuple) # True, preferred for conditional checks
+
+int("42")      # 42      (str -> int)
+str(42)        # "42"    (int -> str)
+float("3.14")  # 3.14    (str -> float)
+list((1, 2))   # [1, 2]  (tuple -> list)
+```
